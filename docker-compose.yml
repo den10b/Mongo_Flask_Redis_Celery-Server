@@ -1,0 +1,31 @@
+
+
+
+services:
+  web:
+   build: ./flask-mongo-app
+   command: python -u run.py
+   ports:
+     - "5000:5000"
+   volumes:
+     - ./flask-mongo-app:/app
+   links:
+     - mongodb
+   depends_on:
+    - mongodb
+   networks:
+     - frontend
+     - backend
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+

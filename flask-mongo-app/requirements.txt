@@ -1,0 +1,3 @@
+setuptools<58
+Flask
+Flask-MongoEngine
