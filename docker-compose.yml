@@ -14,7 +14,7 @@ services:
    networks:
      - frontend
      - backend
-  worker:
+  worker1:
     build: mongo-consumer
     command: python -u worker.py
     ports:
@@ -24,6 +24,35 @@ services:
     depends_on:
       - mongodb
       - rabbit
+      - redis
+    networks:
+      - frontend
+      - backend
+  worker2:
+    build: mongo-consumer
+    command: python -u worker.py
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./mongo-consumer
+    depends_on:
+      - mongodb
+      - rabbit
+      - redis
+    networks:
+      - frontend
+      - backend
+  worker3:
+    build: mongo-consumer
+    command: python -u worker.py
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./mongo-consumer
+    depends_on:
+      - mongodb
+      - rabbit
+      - redis
     networks:
       - frontend
       - backend
@@ -43,6 +72,12 @@ services:
       ports:
         - "15672:15672"
         - "5672:5672"
+      networks:
+        - backend
+  redis:
+      image: redis:latest
+      ports:
+        - "6379:6379"
       networks:
         - backend
 networks:
